@@ -1,12 +1,12 @@
-# Ⓩ Zenith Assistant
-
-Zenith Assistant là ứng dụng chatbot AI được xây dựng bằng **FastAPI** (backend) và **Streamlit** (frontend), tích hợp **Firebase Authentication**, **Firestore**, và mô hình ngôn ngữ **Ollama**.
-
 ## 👤 Thông tin sinh viên
 * **Họ tên:** Nguyễn Lê Anh Kiên
 * **MSSV:** 24120196
 * **Lớp:** 24CTT3
-* **Học phần:** LAB_02: APPLICATION PROGRAMMING INTERFACE AND FIREBASE STUDIO
+* **Học phần:** LAB_02: API FIREBASE
+
+# Ⓩ Zenith Assistant
+
+Zenith Assistant là ứng dụng chatbot AI được xây dựng bằng **FastAPI** (backend) và **Streamlit** (frontend), tích hợp **Firebase Authentication**, **Firestore**, và mô hình ngôn ngữ **Ollama**.
 
 ---
 
@@ -152,3 +152,7 @@ zenith-assistant/
 - Chat với AI (Ollama) có lưu lịch sử
 - Tạo / xóa đoạn chat
 - Lưu trữ hội thoại trên Firestore theo từng người dùng
+
+## Video demo
+
+https://drive.google.com/drive/folders/1m6oB5v-y0Y-JrZeEIDRAK7_T4k2J1q9g?hl=vi
