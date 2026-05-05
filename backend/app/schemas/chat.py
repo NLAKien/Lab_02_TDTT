@@ -7,6 +7,7 @@ class Message(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str
+    conv_id: str
 
 class ChatResponse(BaseModel):
     reply: str
