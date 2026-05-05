@@ -1,6 +1,6 @@
-# 🛡️ Zenith AI - Multipurpose Assistant (LAB_02)
+# Ⓩ Zenith Assistant
 
-**Zenith** là một ứng dụng trợ lý AI đa năng được phát triển trong khuôn khổ bài tập Lab 02. Ứng dụng kết hợp sức mạnh của mô hình ngôn ngữ lớn chạy cục bộ (Local LLM) cùng hệ thống lưu trữ đám mây để hỗ trợ người dùng trong nhiều lĩnh vực từ học thuật đến kỹ thuật chuyên sâu.
+Zenith Assistant là ứng dụng chatbot AI được xây dựng bằng **FastAPI** (backend) và **Streamlit** (frontend), tích hợp **Firebase Authentication**, **Firestore**, và mô hình ngôn ngữ **Ollama**.
 
 ## 👤 Thông tin sinh viên
 * **Họ tên:** Nguyễn Lê Anh Kiên
@@ -10,31 +10,145 @@
 
 ---
 
-## 🚀 Tính năng chính (Features)
+## Yêu cầu hệ thống
 
-* **Học tập đa năng (Multipurpose EL & Academic Support):** Không chỉ dừng lại ở học Tiếng Anh (giải nghĩa, sửa lỗi ngữ pháp), Zenith còn hỗ trợ giải toán (Đại số tuyến tính, ma trận) và phân tích thuật toán.
-* **Trợ lý lập trình chuyên sâu:** Hỗ trợ viết và tối ưu mã nguồn cho các ngôn ngữ C++, Go, và truy vấn SQL Server.
-* **Hệ thống xác thực người dùng:** Tích hợp Firebase Authentication để quản lý đăng ký/đăng nhập cá nhân hóa.
-* **Lưu trữ dữ liệu đám mây:** Toàn bộ lịch sử trò chuyện được đồng bộ hóa và lưu trữ bền vững trên Firebase Firestore.
-* **Hỗ trợ kiến thức CS:** Giải đáp các thắc mắc về cấu trúc dữ liệu và giải thuật (như cây AVL, bảng băm...).
-
----
-
-## 🏗️ Kiến trúc hệ thống (Tech Stack)
-
-* **Frontend:** [Streamlit](https://streamlit.io/) - Giao diện chat hiện đại, trực quan.
-* **Backend:** [FastAPI](https://fastapi.tiangolo.com/) - Xử lý logic API và kết nối dịch vụ.
-* **AI Engine:** [Ollama](https://ollama.com/) (Model: **Llama 3**) - Chạy offline để đảm bảo quyền riêng tư và tốc độ xử lý.
-* **Database & Auth:** [Firebase Studio](https://firebase.google.com/) (Firestore & Authentication).
+- Python >= 3.10
+- [Ollama](https://ollama.com) đã cài đặt và đang chạy local
+- Tài khoản Firebase (có Firestore và Authentication được bật)
+- Google OAuth 2.0 credentials (nếu dùng đăng nhập Google)
 
 ---
 
-## ⚙️ Cài đặt & Khởi chạy (Installation)
+## Cài đặt môi trường
 
-### 1. Yêu cầu hệ thống
-* Python 3.12+
-* Ollama (đã cài đặt model `llama3`)
+### 1. Clone repository
 
-### 2. Cài đặt thư viện
+```bash
+git clone https://github.com/<your-username>/zenith-assistant.git
+cd zenith-assistant
+```
+
+### 2. Tạo virtual environment
+
+```bash
+python -m venv venv
+```
+
+Kích hoạt môi trường:
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# macOS / Linux
+source venv/bin/activate
+```
+
+### 3. Cài đặt dependencies
+
 ```bash
 pip install -r requirements.txt
+```
+
+### 4. Cấu hình Firebase
+
+Tải file `serviceAccountKey.json` từ **Firebase Console → Project Settings → Service Accounts**, sau đó đặt vào thư mục:
+
+```
+backend/app/core/serviceAccountKey.json
+```
+
+### 5. Cấu hình Streamlit Secrets
+
+Tạo file `.streamlit/secrets.toml` ở thư mục gốc với nội dung:
+
+```toml
+[google-login]
+google-url            = "http://localhost:8000/auth/google/start"
+google_client_id      = "YOUR_GOOGLE_CLIENT_ID"
+google_client_secret  = "YOUR_GOOGLE_CLIENT_SECRET"
+google_redirect_uri   = "http://localhost:8000/auth/google/callback"
+firebase_web_api_key  = "YOUR_FIREBASE_WEB_API_KEY"
+frontend_url          = "http://localhost:8501"
+cookie_secure         = false
+```
+
+> **Lưu ý:** Không commit file `secrets.toml` và `serviceAccountKey.json` lên Git.
+
+### 6. Cài đặt và chạy Ollama model
+
+```bash
+ollama pull gemma3
+```
+
+> Có thể thay `gemma3` bằng model khác tùy cấu hình trong `ollama_service.py`.
+
+---
+
+## Chạy Backend
+
+Backend sử dụng **FastAPI** với server **Uvicorn**.
+
+```bash
+# Đảm bảo đang ở thư mục gốc của project và đã kích hoạt venv
+uvicorn backend.app.main:app --reload --port 8000
+```
+
+Backend sẽ chạy tại: [http://localhost:8000](http://localhost:8000)
+
+Kiểm tra API docs tại: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+## Chạy Frontend
+
+Frontend sử dụng **Streamlit**.
+
+```bash
+# Mở terminal mới (giữ backend đang chạy), đảm bảo đã kích hoạt venv
+cd frontend
+streamlit run app.py
+```
+
+Frontend sẽ chạy tại: [http://localhost:8501](http://localhost:8501)
+
+---
+
+## Cấu trúc thư mục
+
+```
+zenith-assistant/
+├── backend/
+│   └── app/
+│       ├── core/
+│       │   └── firebase_config.py
+│       ├── dependencies/
+│       │   └── auth.py
+│       ├── routers/
+│       │   ├── auth.py
+│       │   └── chat.py
+│       ├── schemas/
+│       │   ├── auth.py
+│       │   └── chat.py
+│       ├── services/
+│       │   ├── firestore_service.py
+│       │   └── ollama_service.py
+│       └── main.py
+├── frontend/
+│   ├── app.py
+│   └── api_client.py
+├── .streamlit/
+│   └── secrets.toml
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## Tính năng
+
+- Đăng ký / Đăng nhập bằng Email & Password
+- Đăng nhập bằng Google OAuth
+- Chat với AI (Ollama) có lưu lịch sử
+- Tạo / xóa đoạn chat
+- Lưu trữ hội thoại trên Firestore theo từng người dùng
