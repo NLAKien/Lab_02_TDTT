@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.routers.auth import router as auth_router
 from backend.app.routers.chat import router as chat_router
 
-app = FastAPI(title="Mika Backend")
+app = FastAPI(title="Zenith Assistant API")
 
 app.add_middleware(
     CORSMiddleware,
